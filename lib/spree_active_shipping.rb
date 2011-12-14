@@ -5,7 +5,8 @@ module ActiveShippingExtension
   class Engine < Rails::Engine
     def self.activate
       Dir.glob(File.join(File.dirname(__FILE__), "../app/models/calculator/**/base.rb")) do |c|
-        Rails.env.production? ? require(c) : load(c)
+        # (Rails.env.production? || Rails.env.staging?) ? require(c) : load(c)
+        load(c)
       end
 
       #Only required until following active_shipping commit is merged (add negotiated rates).
@@ -18,7 +19,8 @@ module ActiveShippingExtension
 
     initializer "spree_active_shipping.register.calculators" do |app|
       Dir.glob(File.join(File.dirname(__FILE__), "../app/models/calculator/**/*.rb")) do |c|
-        Rails.env.production? ? require(c) : load(c)
+        # (Rails.env.production? || Rails.env.staging?) ? require(c) : load(c)
+        load(c)
       end
 
       app.config.spree.calculators.shipping_methods.concat( 
