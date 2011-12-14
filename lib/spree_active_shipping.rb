@@ -4,7 +4,7 @@ require 'active_shipping'
 module ActiveShippingExtension
   class Engine < Rails::Engine
     def self.activate
-      Dir.glob(File.join(File.dirname(__FILE__), "../app/models/calculator/**/base.rb")) do |c|
+      Dir.glob(File.join(File.dirname(__FILE__), "../app/models/calculator/**/base.rb")).sort.each do |c|
         (Rails.env.production? || Rails.env.staging?) ? require(c) : load(c)
       end
 
@@ -17,7 +17,7 @@ module ActiveShippingExtension
     config.to_prepare &method(:activate).to_proc
 
     initializer "spree_active_shipping.register.calculators" do |app|
-      Dir.glob(File.join(File.dirname(__FILE__), "../app/models/calculator/**/*.rb")) do |c|
+      Dir.glob(File.join(File.dirname(__FILE__), "../app/models/calculator/**/*.rb")).sort.each do |c|
         (Rails.env.production? || Rails.env.staging?) ? require(c) : load(c)
       end
 
